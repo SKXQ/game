@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Guessing Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    #container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    select, input[type="text"], button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    #hintDisplay, #result {
+        font-size: 18px;
+        color: #333;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <h1>Word Guessing Game</h1>
+    <p>Select up to 4 hints from the dropdown menu to guess the word!</p>
+    <select id="hints" onchange="showHint()" multiple>
+        <option value="letters">How many letters are in the word?</option>
+        <option value="firstLetter">What is the first letter in the word?</option>
+        <option value="lastLetter">What is the last letter in the word?</option>
+        <option value="containsVowel">Does the word contain a vowel?</option>
+    </select>
+    <br>
+    <input type="text" id="guess" name="guess" oninput="this.value = this.value.toUpperCase()">
+    <button onclick="checkGuess()">Guess</button>
+    <p id="hintDisplay"></p>
+    <p id="result"></p>
+</div>
+
+<script>
+    var words = ["APPLE", "BANANA", "CARROT", "DOG", "ELEPHANT", "FROG", "GIRAFFE", "HAMBURGER", "IGLOO", "JACKET", "HOUSE", "POTATO", "COUCH", "GORILLA", "MUSHROOM", "SANDWICH", "PIZZA", "SWISS", "CHEESE", "GOAT", "PARIS", "FRANK",
+"PASTA", "PORK", "RIBS", "BRAIN", "BRIAN", "JUICE", "LEMONADE", "BISCUIT", "WAFFLE", "PANCAKE", "GRAPES", "SAUSAGE", "POKER", "JESTER", "FORK", "SPOON", "KNIFE"];
+    var word = getRandomWord();
+    
+    function getRandomWord() {
+        return words[Math.floor(Math.random() * words.length)];
+    }
+
+    function showHint() {
+        var selectedHints = document.getElementById("hints").selectedOptions;
+        var hintDisplay = document.getElementById("hintDisplay");
+        if (selectedHints.length > 0) {
+            var hint = "";
+            switch(selectedHints[0].value) {
+                case "letters":
+                    hint = "The word has " + word.length + " letters.";
+                    break;
+                case "firstLetter":
+                    hint = "The first letter of the word is '" + word.charAt(0) + "'.";
+                    break;
+                case "lastLetter":
+                    hint = "The last letter of the word is '" + word.charAt(word.length - 1) + "'.";
+                    break;
+                case "containsVowel":
+                    hint = "The word contains a vowel.";
+                    break;
+            }
+            hintDisplay.innerHTML = hint;
+        } else {
+            hintDisplay.innerHTML = "";
+        }
+    }
+
+    function checkGuess() {
+        var guess = document.getElementById("guess").value.toUpperCase();
+        var resultDisplay = document.getElementById("result");
+        if (guess === word) {
+            resultDisplay.innerHTML = "Nice! Try a new word!";
+            // Restart the game
+            word = getRandomWord();
+            document.getElementById("guess").value = "";
+            document.getElementById("hintDisplay").innerHTML = "";
+        } else {
+            resultDisplay.innerHTML = "Incorrect!";
+        }
+    }
+</script>
+</body>
+</html>
